@@ -185,6 +185,22 @@ details.more summary::after{font-size:18px}
 .fp{font:700 18px Manrope,sans-serif;color:var(--olive);white-space:nowrap}
 .fp small{display:block;font:500 12px Mulish,sans-serif;color:var(--muted)}
 @media(max-width:800px){.prow{grid-template-columns:minmax(0,1fr)}}
+.books{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:28px}
+.book{display:grid;gap:16px;align-content:start}
+.cover{aspect-ratio:3/4;background:var(--grain);display:grid;place-items:center;align-content:center;gap:14px;padding:24px;text-align:center;box-shadow:0 26px 40px -24px rgba(42,38,32,.55),inset 6px 0 0 rgba(0,0,0,.12);position:relative}
+.cover img{width:58%;height:auto}
+.cover b{font:500 26px/1.15 "Cormorant Garamond",Georgia,serif;color:var(--ivory)}
+.cover i{font:600 10.5px Manrope,sans-serif;font-style:normal;letter-spacing:.24em;text-transform:uppercase;color:var(--sand)}
+.c-olive{background-color:var(--olive)}.c-earth{background-color:var(--earth)}.c-sage{background-color:var(--sage)}.c-sage b{color:var(--olive)}.c-sage i{color:#3f4a3b}
+.phone{aspect-ratio:3/4;background:var(--grain),#e6e0d4;display:grid;place-items:center}
+.phone div{width:46%;aspect-ratio:9/18;border-radius:22px;background:var(--olive);border:6px solid #2f3a2c;display:grid;place-items:center;align-content:center;gap:10px;padding:10px;text-align:center;box-shadow:0 20px 30px -18px rgba(42,38,32,.6)}
+.phone b{font:500 18px/1.1 "Cormorant Garamond",Georgia,serif;color:var(--ivory)}
+.phone img{width:70%}
+.book h3{font:600 24px/1.15 "Cormorant Garamond",Georgia,serif;color:var(--olive)}
+.book p{color:var(--muted)}
+.bprice{display:flex;justify-content:space-between;align-items:center;gap:12px;border-top:1px solid var(--line);padding-top:14px}
+.bprice span{font:700 17px Manrope,sans-serif;color:var(--olive)}
+.bprice .soon{font:600 11px Manrope,sans-serif;letter-spacing:.2em;text-transform:uppercase;color:var(--earth)}
 /* faq */
 .two{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.4fr);gap:40px clamp(40px,6vw,96px)}
 @media(max-width:860px){.two{grid-template-columns:minmax(0,1fr)}}
@@ -245,6 +261,7 @@ footer .col{display:grid;gap:10px;align-content:start}
       <a href="#programmes">Programmes</a>
       <a href="#teachers">Teachers</a>
       <a href="#kids">Kids</a>
+      <a href="#resources">Resources</a>
       <a href="#fees">Fees</a>
       <a href="#contact">Contact</a>
       <a class="btn cta" href="#enrol">Enrol</a>
@@ -399,6 +416,16 @@ footer .col{display:grid;gap:10px;align-content:start}
   </div>
 </section>
 
+<!-- RESOURCES -->
+<section class="page" id="p-resources">
+  <div class="band">
+    <div class="wrap">
+      <div class="head"><span class="label">Resources</span><h1>Books and <em>study tools</em></h1><p class="sub">Written for our programmes. Each one follows the lessons step by step, so students practise exactly what they learn in class and revise properly in between.</p></div>
+      <div class="books" id="bookList"></div>
+    </div>
+  </div>
+</section>
+
 <!-- FEES -->
 <section class="page" id="p-fees">
   <div class="band">
@@ -430,20 +457,12 @@ footer .col{display:grid;gap:10px;align-content:start}
       </div>
       <p class="note">Ijazah programmes are taught by Specialist Teachers only. For a tailor made programme combining several subjects, we will send you a personal monthly quote.</p>
 
-      <div class="two" style="margin-top:64px;gap:40px clamp(40px,6vw,96px)">
-        <div class="stackc">
-          <span class="label">Books and apps</span>
-          <h2>Course <em>books</em></h2>
-          <p class="sub">Our books are written for our programmes. Each one follows the lessons step by step, so students can revise properly between classes.</p>
-          <div class="tbl"><table><tbody id="shopRows"></tbody></table></div>
-          <div class="acts"><a class="btn line wa" href="#" target="_blank" rel="noopener">Order on WhatsApp</a></div>
-        </div>
+      <div style="margin-top:64px;max-width:760px">
         <div class="stackc">
           <span class="label">Policies</span>
           <h2>How it <em>works</em></h2>
           <ul class="list" id="policyList" style="gap:14px"></ul>
         </div>
-      </div>
       <div class="acts" style="justify-content:center;margin-top:56px"><a class="btn cta" href="#enrol">Enrol now</a></div>
     </div>
   </div>
@@ -592,15 +611,20 @@ const feeBox = (p,i) => `<div class="feebox"><div class="fhead"><span>Weekly tim
 $("progList").innerHTML = programmes.map((p,i) =>
   `<article class="prow" id="prog-${i}" data-adults="${p.f.includes("Adult")?1:0}" data-kids="${p.kid?1:0}">
    <div class="k"><span>${p.f}</span><h3>${p.n}</h3><span class="plen">${p.len}</span></div>
-   <div style="display:grid;gap:14px"><p class="outcome">${p.o}</p><span class="label">What you walk away with</span><ul class="list win">${p.win.map(l=>`<li>${l}</li>`).join("")}</ul><details class="more"><summary>What you learn</summary><ul class="list">${p.learn.map(l=>`<li>${l}</li>`).join("")}</ul></details>${p.book?`<p class="bookline">Course material: <a href="#fees">${p.book}</a>, available in our shop</p>`:""}</div>
+   <div style="display:grid;gap:14px"><p class="outcome">${p.o}</p><span class="label">What you walk away with</span><ul class="list win">${p.win.map(l=>`<li>${l}</li>`).join("")}</ul><details class="more"><summary>What you learn</summary><ul class="list">${p.learn.map(l=>`<li>${l}</li>`).join("")}</ul></details>${p.book?`<p class="bookline">Course material: <a href="#resources">${p.book}</a>, available in our shop</p>`:""}</div>
    ${feeBox(p,i)}</article>`).join("");
 document.addEventListener("click", e => { const b = e.target.closest("[data-pick]"); if(b){ const sel=$("fProg"); if(sel) sel.value = programmes[b.dataset.pick].n; } });
 
 $("feeRows").innerHTML = programmes.map(p => p.fees.map((f,i) =>
   `<tr><td>${i?"":p.n}</td><td data-l="For">${i?"":p.f}</td><td data-l="Duration">${i?"":p.len}</td><td data-l="Weekly time">${wk(f)}</td><td data-l="Qualified" class="money">${p.spec?"Not available":"£"+f[1]}</td><td data-l="Specialist" class="money">£${f[2]}</td></tr>`).join("")).join("");
 
-const shop = [["Silsilah Qa'idah Book","Coming soon"],["Silsilah Tajweed Book 1","Coming soon"],["Silsilah Tajweed Book 2","Coming soon"],["Hifdh Planner App","£27"]];
-$("shopRows").innerHTML = shop.map(x=>`<tr><td>${x[0]}</td><td class="money" style="text-align:right">${x[1]}</td></tr>`).join("");
+const books = [
+  {n:"Silsilah Qa'idah Book", c:"c-olive", t:"Qa'idah", soon:1, prog:"Qa'idah Programme", d:"Every letter and rule in the order it is taught in our Qa'idah Programme, with practice for each lesson."},
+  {n:"Silsilah Tajweed Book 1", c:"c-earth", t:"Tajweed 1", soon:1, prog:"Beginner Tajweed", d:"The foundations of Tajweed, taught alongside recitation, so every rule is practised and not just memorised."},
+  {n:"Silsilah Tajweed Book 2", c:"c-sage", t:"Tajweed 2", soon:1, prog:"Beginner Tajweed", d:"Builds on Book 1, taking students further into the rules and how to apply them in their own recitation."},
+  {n:"Hifdh Planner App", app:1, price:"£27", prog:"Hifdh Programme", d:"Plan new memorisation and revision in one place, so old pages are never lost."}
+];
+$("bookList").innerHTML = books.map(b => `<article class="book">${b.app?`<div class="phone"><div><img src="logo_ivory.png" alt=""><b>Hifdh Planner</b></div></div>`:`<div class="cover ${b.c}"><img src="${b.c==="c-sage"?"logo_green.png":"logo_ivory.png"}" alt=""><b>${b.t}</b><i>Silsilah Institute</i></div>`}<span class="label">${b.prog}</span><h3>${b.n}</h3><p>${b.d}</p><div class="bprice">${b.soon?'<span class="soon">Coming soon</span><a class="btn line wa-book" data-b="'+b.n+'" href="#" target="_blank" rel="noopener" style="min-height:42px;padding:0 16px">Notify me</a>':'<span>'+b.price+'</span><a class="btn cta wa-book" data-b="'+b.n+'" href="#" target="_blank" rel="noopener" style="min-height:42px;padding:0 16px">Order</a>'}</div></article>`).join("");
 
 const policies = ["One fixed monthly fee, paid before the month begins.","Up to 2 reschedules a month with 24 hours' notice, taken within the same month.","Lessons missed without notice cannot be made up or refunded.","Teacher cancellations are always made up.","Closed for Eid al Fitr and Eid al Adha, which are included in the fee.","Holidays: 1 week's notice. Pay 50% to hold your slot, for up to 4 weeks per break and 8 weeks a year.","Leaving: one full month's notice. If leaving within the first 3 months, the final bill is worked out per lesson."];
 $("policyList").innerHTML = policies.map(x=>`<li>${x}</li>`).join("");
@@ -625,6 +649,7 @@ $("faqList").innerHTML = faqs.map(f=>`<details><summary>${f[0]}</summary><p>${f[
 
 const waLink = t => "https://wa.me/" + WA + "?text=" + encodeURIComponent(t);
 document.querySelectorAll(".wa").forEach(a => a.href = waLink("Assalamu alaikum, I would like to know more about classes at Silsilah Institute."));
+document.querySelectorAll(".wa-book").forEach(a => a.href = waLink("Assalamu alaikum, I am interested in the "+a.dataset.b+"."));
 document.querySelectorAll(".waNum").forEach(s => s.textContent = "+44 7763 922752");
 $("yr").textContent = new Date().getFullYear();
 
@@ -635,7 +660,7 @@ const setFilter = f => {
 $("progFilter").addEventListener("click", e => { const b = e.target.closest(".fbtn"); if(b) setFilter(b.dataset.f); });
 let goTo = null;
 $("kidsList").addEventListener("click", e => { const a = e.target.closest("[data-go]"); if(a) goTo = a.dataset.go; });
-const pages = ["home","programmes","teachers","kids","fees","enrol","contact"];
+const pages = ["home","programmes","teachers","kids","resources","fees","enrol","contact"];
 const show = () => {
   const h = location.hash.slice(1);
   const p = pages.includes(h) ? h : "home";
